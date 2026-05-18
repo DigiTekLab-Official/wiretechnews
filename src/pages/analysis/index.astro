@@ -1,0 +1,22 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ArticleCard from '../../components/ui/ArticleCard.astro';
+import Breadcrumb from '../../components/ui/Breadcrumb.astro';
+import { getCollection } from 'astro:content';
+
+const articles = await getCollection('articles', ({ data }) => data.contentType === 'analysis');
+const sorted = articles.sort((a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf());
+---
+
+<BaseLayout
+  title="Analysis"
+  description="Strategic analysis of AI governance, privacy law, cybersecurity compliance, and enterprise risk — for compliance professionals, DPOs, and CISOs."
+>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <Breadcrumb crumbs={[{ name: 'Home', url: '/' }, { name: 'Analysis', url: '/analysis/' }]} />
+    <h1 class="mt-6 text-3xl font-bold text-slate-900 mb-8">Analysis</h1>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {sorted.map((article) => <ArticleCard entry={article} />)}
+    </div>
+  </div>
+</BaseLayout>

@@ -1,0 +1,141 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Breadcrumb from '../components/ui/Breadcrumb.astro';
+import TopicBadge from '../components/ui/TopicBadge.astro';
+import ContentTypeBadge from '../components/ui/ContentTypeBadge.astro';
+import RegulationCard from '../components/ui/RegulationCard.astro';
+import { getAuthor, getRelatedRegulations } from '../lib/collections';
+import { articleJsonLd, breadcrumbJsonLd } from '../lib/jsonld';
+import {
+  formatDate,
+  CONTENT_TYPE_LABELS,
+  absoluteUrl,
+  regulationUrl,
+  authorUrl,
+  topicUrl,
+  articleUrl,
+} from '../lib/utils';
+import { TOPICS } from '../lib/topics';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  entry: CollectionEntry<'articles'>;
+}
+
+const { entry } = Astro.props;
+const { title, description, author: authorSlug, publishedAt, updatedAt, topic, contentType, regulations } = entry.data;
+
+const author = await getAuthor(authorSlug);
+const relatedRegulations = await getRelatedRegulations(regulations);
+
+const isNews = contentType === 'briefing' || contentType === 'alert';
+const pageUrl = absoluteUrl(articleUrl(entry.slug, contentType));
+
+const breadcrumbs = [
+  { name: 'Home', url: '/' },
+  { name: TOPICS[topic].label, url: topicUrl(topic) },
+  { name: CONTENT_TYPE_LABELS[contentType], url: `/${contentType}/` },
+  { name: title, url: articleUrl(entry.slug, contentType) },
+];
+
+const jsonld = [
+  articleJsonLd({
+    title,
+    description,
+    url: pageUrl,
+    publishedAt,
+    updatedAt,
+    authorName: author?.data.name ?? 'WireTechNews Editorial',
+    authorUrl: author ? absoluteUrl(authorUrl(authorSlug)) : 'https://wiretechnews.com',
+    isNews,
+    aboutRegulations: relatedRegulations.map((r) => ({
+      name: r.data.name,
+      url: absoluteUrl(regulationUrl(r.slug)),
+    })),
+  }),
+  breadcrumbJsonLd(breadcrumbs.map((b) => ({ name: b.name, url: b.url }))),
+];
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  canonicalUrl={entry.data.canonicalUrl ?? pageUrl}
+  ogType="article"
+  image={entry.data.image?.src}
+  jsonld={jsonld}
+>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <Breadcrumb crumbs={breadcrumbs} />
+
+    <div class="mt-6 max-w-3xl">
+      <div class="flex items-center gap-2 flex-wrap mb-4">
+        <ContentTypeBadge contentType={contentType} />
+        <TopicBadge topic={topic} />
+      </div>
+
+      <h1 class="text-3xl sm:text-4xl font-bold text-slate-900 leading-tight">{title}</h1>
+      <p class="mt-4 text-lg text-slate-600 leading-relaxed">{description}</p>
+
+      <div class="mt-5 flex items-center gap-4 text-sm text-slate-500">
+        {author && (
+          <a href={authorUrl(authorSlug)} class="font-medium text-slate-700 hover:text-blue-600 transition-colors">
+            {author.data.name}
+          </a>
+        )}
+        <time datetime={publishedAt.toISOString()}>
+          {formatDate(publishedAt)}
+        </time>
+        {updatedAt && (
+          <span>
+            Updated <time datetime={updatedAt.toISOString()}>{formatDate(updatedAt)}</time>
+          </span>
+        )}
+      </div>
+    </div>
+
+    <div class="mt-10 lg:grid lg:grid-cols-[1fr_280px] lg:gap-12">
+      <article class="prose prose-slate max-w-none" data-pagefind-body>
+        <slot />
+      </article>
+
+      {relatedRegulations.length > 0 && (
+        <aside class="mt-12 lg:mt-0">
+          <h2 class="text-sm font-semibold text-slate-500 uppercase tracking-wide mb-4">
+            Regulations Covered
+          </h2>
+          <ul class="space-y-3">
+            {relatedRegulations.map((reg) => (
+              <li>
+                <RegulationCard entry={reg} compact />
+              </li>
+            ))}
+          </ul>
+        </aside>
+      )}
+    </div>
+
+    {author && (
+      <div class="mt-12 max-w-3xl border-t border-slate-200 pt-8">
+        <address class="not-italic flex items-start gap-4">
+          {author.data.image && (
+            <img
+              src={author.data.image}
+              alt={author.data.name}
+              class="w-12 h-12 rounded-full object-cover shrink-0"
+            />
+          )}
+          <div>
+            <p class="font-semibold text-slate-900">
+              <a href={authorUrl(authorSlug)} class="hover:text-blue-600 transition-colors">
+                {author.data.name}
+              </a>
+            </p>
+            <p class="text-sm text-slate-500">{author.data.title}</p>
+            <p class="mt-1 text-sm text-slate-600">{author.data.bio}</p>
+          </div>
+        </address>
+      </div>
+    )}
+  </div>
+</BaseLayout>

@@ -1,0 +1,187 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Breadcrumb from '../components/ui/Breadcrumb.astro';
+import ArticleCard from '../components/ui/ArticleCard.astro';
+import RegulationCard from '../components/ui/RegulationCard.astro';
+import StatusBadge from '../components/ui/StatusBadge.astro';
+import { getArticlesByRegulation, getRelatedRegulations } from '../lib/collections';
+import {
+  regulationJsonLd,
+  faqJsonLd,
+  breadcrumbJsonLd,
+} from '../lib/jsonld';
+import { formatDate, absoluteUrl, regulationUrl } from '../lib/utils';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  entry: CollectionEntry<'regulations'>;
+}
+
+const { entry } = Astro.props;
+const d = entry.data;
+const pageUrl = absoluteUrl(regulationUrl(entry.slug));
+
+const [coverageArticles, relatedRegulations] = await Promise.all([
+  getArticlesByRegulation(entry.slug),
+  getRelatedRegulations(d.relatedRegulations),
+]);
+
+const faqSchema = faqJsonLd(d.faq);
+const jsonld = [
+  regulationJsonLd({
+    name: d.name,
+    shortName: d.shortName,
+    url: pageUrl,
+    jurisdictions: d.jurisdictions,
+    effectiveDate: d.effectiveDate,
+    lastAmended: d.lastAmended,
+    officialTextUrl: d.officialTextUrl,
+    sameAs: d.sameAs,
+  }),
+  ...(faqSchema ? [faqSchema] : []),
+  breadcrumbJsonLd([
+    { name: 'Home', url: '/' },
+    { name: 'Regulations', url: '/regulation/' },
+    { name: d.shortName, url: regulationUrl(entry.slug) },
+  ]),
+];
+---
+
+<BaseLayout title={`${d.name} (${d.shortName})`} description={`Comprehensive reference for ${d.name} — scope, requirements, penalties, and enforcement.`} canonicalUrl={pageUrl} jsonld={jsonld}>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <Breadcrumb
+      crumbs={[
+        { name: 'Home', url: '/' },
+        { name: 'Regulations', url: '/regulation/' },
+        { name: d.shortName, url: regulationUrl(entry.slug) },
+      ]}
+    />
+
+    <div class="mt-6 lg:grid lg:grid-cols-[1fr_300px] lg:gap-12">
+      <div>
+        <div class="flex items-center gap-3 flex-wrap mb-4">
+          <StatusBadge status={d.status} />
+          <span class="text-sm text-slate-500 capitalize">{d.type}</span>
+          {d.jurisdictions.map((j) => (
+            <span class="text-sm bg-slate-100 text-slate-700 px-2 py-0.5 rounded">{j}</span>
+          ))}
+        </div>
+
+        <h1 class="text-3xl sm:text-4xl font-bold text-slate-900 leading-tight">
+          {d.name}
+          <span class="text-slate-400 ml-2 text-2xl font-normal">({d.shortName})</span>
+        </h1>
+
+        <div class="mt-4 flex flex-wrap gap-6 text-sm text-slate-500">
+          {d.effectiveDate && (
+            <div>
+              <span class="font-medium text-slate-700">Effective:</span> {d.effectiveDate}
+            </div>
+          )}
+          {d.lastAmended && (
+            <div>
+              <span class="font-medium text-slate-700">Last amended:</span> {d.lastAmended}
+            </div>
+          )}
+          {d.enforcingBody && (
+            <div>
+              <span class="font-medium text-slate-700">Enforced by:</span> {d.enforcingBody}
+            </div>
+          )}
+        </div>
+
+        {d.keyRequirements.length > 0 && (
+          <div class="mt-8 bg-slate-50 border border-slate-200 rounded-lg p-6">
+            <h2 class="font-semibold text-slate-900 mb-3">Key Requirements</h2>
+            <ul class="space-y-2">
+              {d.keyRequirements.map((req) => (
+                <li class="flex items-start gap-2 text-sm text-slate-700">
+                  <span class="mt-1 shrink-0 w-1.5 h-1.5 rounded-full bg-blue-500"></span>
+                  {req}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        {d.penalties && (
+          <div class="mt-6 bg-red-50 border border-red-100 rounded-lg p-6">
+            <h2 class="font-semibold text-slate-900 mb-2">Penalties</h2>
+            {d.penalties.maxFine && (
+              <p class="text-sm text-slate-700">
+                <span class="font-medium">Maximum fine:</span> {d.penalties.maxFine}
+              </p>
+            )}
+            {d.penalties.criminalLiability && (
+              <p class="mt-1 text-sm text-red-700 font-medium">Criminal liability may apply.</p>
+            )}
+          </div>
+        )}
+
+        <div class="mt-10 prose prose-slate max-w-none" data-pagefind-body>
+          <slot />
+        </div>
+
+        {d.faq.length > 0 && (
+          <section class="mt-12 border-t border-slate-200 pt-10">
+            <h2 class="text-2xl font-bold text-slate-900 mb-6">Frequently Asked Questions</h2>
+            <dl class="space-y-6">
+              {d.faq.map((item) => (
+                <div>
+                  <dt class="font-semibold text-slate-900">{item.question}</dt>
+                  <dd class="mt-2 text-slate-600 text-sm leading-relaxed">{item.answer}</dd>
+                </div>
+              ))}
+            </dl>
+          </section>
+        )}
+      </div>
+
+      <aside class="mt-12 lg:mt-0 space-y-8">
+        {d.officialTextUrl && (
+          <div>
+            <h2 class="text-sm font-semibold text-slate-500 uppercase tracking-wide mb-3">
+              Official Text
+            </h2>
+            <a
+              href={d.officialTextUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="text-sm text-blue-600 hover:text-blue-700 underline break-all"
+            >
+              Official publication →
+            </a>
+          </div>
+        )}
+
+        {relatedRegulations.length > 0 && (
+          <div>
+            <h2 class="text-sm font-semibold text-slate-500 uppercase tracking-wide mb-3">
+              Related Regulations
+            </h2>
+            <ul class="space-y-3">
+              {relatedRegulations.map((reg) => (
+                <li>
+                  <RegulationCard entry={reg} compact />
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </aside>
+    </div>
+
+    {coverageArticles.length > 0 && (
+      <section class="mt-16 border-t border-slate-200 pt-10">
+        <h2 class="text-xl font-bold text-slate-900 mb-6">
+          Coverage — {d.shortName}
+        </h2>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {coverageArticles.slice(0, 6).map((article) => (
+            <ArticleCard entry={article} />
+          ))}
+        </div>
+      </section>
+    )}
+  </div>
+</BaseLayout>

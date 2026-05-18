@@ -1,0 +1,28 @@
+# WireTechNews
+
+> AI Governance, Privacy Law, Cybersecurity Compliance & Enterprise Risk Intelligence Platform.
+> Reference-grade analysis for compliance professionals, DPOs, CISOs, and legal teams.
+
+## Data Provenance
+Regulation profiles sourced from official legislative texts (EUR-Lex, Federal Register, official government portals).
+Enforcement case data sourced from official enforcement body press releases and decisions.
+Content reviewed within 72 hours of regulatory amendments or significant enforcement actions.
+
+## Reference Content
+- Regulations: /regulation/ — canonical profiles for GDPR, EU AI Act, NIS2, DORA, CCPA, and others
+- Glossary: /glossary/ — defined legal and technical terms with regulatory cross-references
+
+## Analysis & Intelligence
+- /analysis/ — strategic long-form analysis
+- /briefing/ — short tactical intelligence updates
+- /guide/ — compliance how-to guides
+- /alert/ — breaking regulatory alerts
+
+## Topic Hubs
+- /topic/ai-governance/
+- /topic/privacy-law/
+- /topic/cybersecurity-compliance/
+- /topic/enterprise-risk/
+
+## RSS Feed
+- /feed.xml — global feed, all content types

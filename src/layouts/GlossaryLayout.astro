@@ -1,0 +1,108 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Breadcrumb from '../components/ui/Breadcrumb.astro';
+import TopicBadge from '../components/ui/TopicBadge.astro';
+import RegulationCard from '../components/ui/RegulationCard.astro';
+import { getRelatedRegulations } from '../lib/collections';
+import { getCollection, getEntry } from 'astro:content';
+import { glossaryEntryJsonLd, breadcrumbJsonLd } from '../lib/jsonld';
+import { absoluteUrl, glossaryUrl } from '../lib/utils';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  entry: CollectionEntry<'glossary'>;
+}
+
+const { entry } = Astro.props;
+const { term, shortDefinition, regulations: regulationSlugs, relatedTerms, topic } = entry.data;
+const pageUrl = absoluteUrl(glossaryUrl(entry.slug));
+
+const [regulationEntries, relatedTermEntries] = await Promise.all([
+  getRelatedRegulations(regulationSlugs),
+  Promise.all(relatedTerms.map((slug) => getEntry('glossary', slug))),
+]);
+
+const jsonld = [
+  glossaryEntryJsonLd({ term, shortDefinition, url: pageUrl }),
+  breadcrumbJsonLd([
+    { name: 'Home', url: '/' },
+    { name: 'Glossary', url: '/glossary/' },
+    { name: term, url: glossaryUrl(entry.slug) },
+  ]),
+];
+---
+
+<BaseLayout
+  title={`${term} — Definition`}
+  description={shortDefinition}
+  canonicalUrl={pageUrl}
+  jsonld={jsonld}
+>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <Breadcrumb
+      crumbs={[
+        { name: 'Home', url: '/' },
+        { name: 'Glossary', url: '/glossary/' },
+        { name: term, url: glossaryUrl(entry.slug) },
+      ]}
+    />
+
+    <div class="mt-6 lg:grid lg:grid-cols-[1fr_280px] lg:gap-12">
+      <div>
+        <div class="flex items-center gap-2 mb-4">
+          {topic && <TopicBadge topic={topic} />}
+          <span class="text-sm text-slate-500 bg-slate-100 px-2 py-0.5 rounded">Defined Term</span>
+        </div>
+
+        <h1 class="text-3xl sm:text-4xl font-bold text-slate-900">{term}</h1>
+
+        <blockquote class="mt-6 border-l-4 border-blue-500 pl-5 py-1">
+          <p class="text-lg text-slate-700 leading-relaxed italic">{shortDefinition}</p>
+        </blockquote>
+
+        <div class="mt-8 prose prose-slate max-w-none" data-pagefind-body>
+          <slot />
+        </div>
+      </div>
+
+      <aside class="mt-12 lg:mt-0 space-y-8">
+        {regulationEntries.length > 0 && (
+          <div>
+            <h2 class="text-sm font-semibold text-slate-500 uppercase tracking-wide mb-3">
+              Defined in
+            </h2>
+            <ul class="space-y-3">
+              {regulationEntries.map((reg) => (
+                <li>
+                  <RegulationCard entry={reg} compact />
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        {relatedTermEntries.filter(Boolean).length > 0 && (
+          <div>
+            <h2 class="text-sm font-semibold text-slate-500 uppercase tracking-wide mb-3">
+              Related Terms
+            </h2>
+            <ul class="space-y-2">
+              {relatedTermEntries
+                .filter((t): t is CollectionEntry<'glossary'> => t !== undefined)
+                .map((t) => (
+                  <li>
+                    <a
+                      href={glossaryUrl(t.slug)}
+                      class="text-sm text-blue-600 hover:text-blue-700 transition-colors"
+                    >
+                      {t.data.term}
+                    </a>
+                  </li>
+                ))}
+            </ul>
+          </div>
+        )}
+      </aside>
+    </div>
+  </div>
+</BaseLayout>

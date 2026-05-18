@@ -1,0 +1,22 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ArticleCard from '../../components/ui/ArticleCard.astro';
+import Breadcrumb from '../../components/ui/Breadcrumb.astro';
+import { getCollection } from 'astro:content';
+
+const articles = await getCollection('articles', ({ data }) => data.contentType === 'alert');
+const sorted = articles.sort((a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf());
+---
+
+<BaseLayout
+  title="Regulatory Alerts"
+  description="Breaking regulatory alerts on AI governance, privacy law, cybersecurity compliance, and enterprise risk — published within 24 hours of significant regulatory developments."
+>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <Breadcrumb crumbs={[{ name: 'Home', url: '/' }, { name: 'Alerts', url: '/alert/' }]} />
+    <h1 class="mt-6 text-3xl font-bold text-slate-900 mb-8">Regulatory Alerts</h1>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {sorted.map((article) => <ArticleCard entry={article} />)}
+    </div>
+  </div>
+</BaseLayout>

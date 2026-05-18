@@ -1,0 +1,38 @@
+---
+term: Data Minimisation
+shortDefinition: The principle that personal data collected and processed must be limited to what is necessary for the specified purpose.
+regulations:
+  - gdpr
+relatedTerms:
+  - purpose-limitation
+  - storage-limitation
+topic: privacy-law
+---
+
+## Definition
+
+Data minimisation is a core data protection principle requiring that organisations collect, process, and retain only the personal data that is strictly necessary for the specific, legitimate purpose for which it was collected.
+
+The principle is codified in Article 5(1)(c) of the GDPR, which requires personal data to be "adequate, relevant and limited to what is necessary in relation to the purposes for which they are processed."
+
+## Practical Application
+
+In practice, data minimisation requires organisations to:
+
+- **Collection stage** — only ask for data fields that are genuinely required, not "nice to have"
+- **Form design** — avoid optional fields that are routinely collected as a matter of course
+- **System design** — implement technical controls that prevent collection of unnecessary data
+- **Third-party data sharing** — only share the minimum data necessary for the third party's specific function
+- **Analytics and profiling** — avoid building detailed profiles beyond what the stated purpose requires
+
+## Common Violations
+
+Enforcement authorities commonly cite data minimisation failures in:
+- Sign-up forms collecting date of birth, phone number, or address where not required
+- Cookie banners enabling broad profiling trackers by default
+- Employee monitoring tools collecting more granular data than necessary for the stated HR purpose
+- APIs returning full data objects when only a subset of fields is needed by the calling system
+
+## Relationship to Privacy by Design
+
+Data minimisation is a foundational requirement of privacy by design (Art. 25 GDPR). Technical architecture decisions — data models, API contracts, database schemas — should be designed to minimise data at source rather than relying solely on policy controls.

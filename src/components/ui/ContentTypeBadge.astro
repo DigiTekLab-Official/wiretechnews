@@ -1,0 +1,20 @@
+---
+import { CONTENT_TYPE_LABELS } from '../../lib/utils';
+
+interface Props {
+  contentType: 'analysis' | 'briefing' | 'guide' | 'alert';
+}
+
+const { contentType } = Astro.props;
+
+const colors: Record<string, string> = {
+  analysis: 'bg-blue-100 text-blue-800',
+  briefing: 'bg-indigo-100 text-indigo-800',
+  guide: 'bg-emerald-100 text-emerald-800',
+  alert: 'bg-red-100 text-red-800',
+};
+---
+
+<span class={`inline-flex text-xs font-medium px-2 py-0.5 rounded-full ${colors[contentType]}`}>
+  {CONTENT_TYPE_LABELS[contentType]}
+</span>

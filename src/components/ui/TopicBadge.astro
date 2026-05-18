@@ -1,0 +1,24 @@
+---
+import { TOPICS } from '../../lib/topics';
+import type { TopicSlug } from '../../lib/topics';
+
+interface Props {
+  topic: TopicSlug;
+}
+
+const { topic } = Astro.props;
+
+const colors: Record<TopicSlug, string> = {
+  'ai-governance': 'bg-violet-100 text-violet-800',
+  'privacy-law': 'bg-blue-100 text-blue-800',
+  'cybersecurity-compliance': 'bg-cyan-100 text-cyan-800',
+  'enterprise-risk': 'bg-amber-100 text-amber-800',
+};
+---
+
+<a
+  href={`/topic/${topic}/`}
+  class={`inline-flex text-xs font-medium px-2 py-0.5 rounded-full transition-opacity hover:opacity-80 ${colors[topic]}`}
+>
+  {TOPICS[topic].label}
+</a>

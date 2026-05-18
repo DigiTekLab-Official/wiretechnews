@@ -1,0 +1,20 @@
+---
+import { REGULATION_STATUS_LABELS } from '../../lib/utils';
+
+interface Props {
+  status: 'proposed' | 'active' | 'amended' | 'repealed';
+}
+
+const { status } = Astro.props;
+
+const colors: Record<string, string> = {
+  proposed: 'bg-yellow-100 text-yellow-800',
+  active: 'bg-emerald-100 text-emerald-800',
+  amended: 'bg-blue-100 text-blue-800',
+  repealed: 'bg-slate-100 text-slate-600',
+};
+---
+
+<span class={`inline-flex text-xs font-semibold px-2.5 py-0.5 rounded-full ${colors[status]}`}>
+  {REGULATION_STATUS_LABELS[status]}
+</span>

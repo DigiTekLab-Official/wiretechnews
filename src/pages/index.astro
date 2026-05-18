@@ -1,0 +1,104 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ArticleCard from '../components/ui/ArticleCard.astro';
+import RegulationCard from '../components/ui/RegulationCard.astro';
+import NewsletterForm from '../components/islands/NewsletterForm';
+import { getAllArticlesSorted } from '../lib/collections';
+import { getCollection } from 'astro:content';
+import { TOPICS, TOPIC_SLUGS } from '../lib/topics';
+import { websiteJsonLd } from '../lib/jsonld';
+
+const [articles, regulations] = await Promise.all([
+  getAllArticlesSorted(),
+  getCollection('regulations'),
+]);
+
+const featured = articles.filter((a) => a.data.featured).slice(0, 1);
+const recent = articles.filter((a) => !a.data.featured).slice(0, 6);
+const latestRegulations = regulations.slice(0, 4);
+---
+
+<BaseLayout
+  title="WireTechNews"
+  description="AI Governance, Privacy Law, Cybersecurity Compliance & Enterprise Risk Intelligence for compliance professionals, DPOs, CISOs, and legal teams."
+  jsonld={[websiteJsonLd()]}
+>
+  <section class="bg-slate-900 text-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
+      <div class="max-w-2xl">
+        <p class="text-blue-400 text-sm font-semibold uppercase tracking-widest mb-4">
+          Intelligence Platform
+        </p>
+        <h1 class="text-4xl sm:text-5xl font-bold leading-tight">
+          AI Governance, Privacy Law & Cybersecurity Compliance Intelligence
+        </h1>
+        <p class="mt-5 text-slate-300 text-lg leading-relaxed">
+          Reference-grade analysis and regulatory intelligence for compliance professionals, DPOs, CISOs, and legal teams.
+        </p>
+        <div class="mt-8">
+          <p class="text-sm text-slate-400 mb-3">Weekly intelligence briefings — free.</p>
+          <NewsletterForm client:load className="max-w-sm" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    {featured.length > 0 && (
+      <section class="mb-12">
+        <h2 class="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-5">
+          Featured
+        </h2>
+        <div class="border border-slate-200 rounded-xl p-6 sm:p-8">
+          <ArticleCard entry={featured[0]} featured />
+        </div>
+      </section>
+    )}
+
+    <section class="mb-16">
+      <h2 class="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-5">
+        Latest Intelligence
+      </h2>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {recent.map((article) => (
+          <ArticleCard entry={article} />
+        ))}
+      </div>
+    </section>
+
+    <section class="mb-16">
+      <h2 class="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-5">
+        Topics
+      </h2>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {TOPIC_SLUGS.map((slug) => (
+          <a
+            href={`/topic/${slug}/`}
+            class="group border border-slate-200 rounded-lg p-5 hover:border-blue-300 hover:bg-blue-50 transition-colors"
+          >
+            <p class="font-semibold text-slate-900 group-hover:text-blue-700">{TOPICS[slug].label}</p>
+            <p class="mt-2 text-xs text-slate-500 leading-relaxed">{TOPICS[slug].description}</p>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    {latestRegulations.length > 0 && (
+      <section>
+        <div class="flex items-center justify-between mb-5">
+          <h2 class="text-xs font-semibold text-slate-500 uppercase tracking-wide">
+            Regulation Reference
+          </h2>
+          <a href="/regulation/" class="text-sm text-blue-600 hover:text-blue-700 font-medium">
+            All regulations →
+          </a>
+        </div>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {latestRegulations.map((reg) => (
+            <RegulationCard entry={reg} />
+          ))}
+        </div>
+      </section>
+    )}
+  </div>
+</BaseLayout>

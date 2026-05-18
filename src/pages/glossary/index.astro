@@ -1,0 +1,61 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import GlossaryCard from '../../components/ui/GlossaryCard.astro';
+import Breadcrumb from '../../components/ui/Breadcrumb.astro';
+import { getCollection } from 'astro:content';
+import { breadcrumbJsonLd } from '../../lib/jsonld';
+
+const entries = await getCollection('glossary');
+const sorted = entries.sort((a, b) => a.data.term.localeCompare(b.data.term));
+
+// Group alphabetically
+const grouped = sorted.reduce<Record<string, typeof sorted>>((acc, entry) => {
+  const letter = entry.data.term[0].toUpperCase();
+  (acc[letter] ??= []).push(entry);
+  return acc;
+}, {});
+
+const letters = Object.keys(grouped).sort();
+---
+
+<BaseLayout
+  title="Glossary — Defined Terms"
+  description="Definitions for key legal and technical terms in AI governance, privacy law, cybersecurity compliance, and enterprise risk — with regulatory cross-references."
+  jsonld={[
+    { '@context': 'https://schema.org', '@type': 'DefinedTermSet', name: 'WireTechNews Glossary', url: 'https://wiretechnews.com/glossary/', description: 'Defined terms for AI governance, privacy law, and cybersecurity compliance.' },
+    breadcrumbJsonLd([{ name: 'Home', url: '/' }, { name: 'Glossary', url: '/glossary/' }]),
+  ]}
+>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <Breadcrumb crumbs={[{ name: 'Home', url: '/' }, { name: 'Glossary', url: '/glossary/' }]} />
+
+    <div class="mt-6 mb-8">
+      <h1 class="text-3xl font-bold text-slate-900">Glossary</h1>
+      <p class="mt-3 text-slate-600 max-w-2xl">
+        Defined terms for AI governance, privacy law, cybersecurity compliance, and enterprise risk — with cross-references to source regulations.
+      </p>
+    </div>
+
+    <nav class="flex flex-wrap gap-2 mb-8" aria-label="Alphabetical index">
+      {letters.map((letter) => (
+        <a
+          href={`#${letter}`}
+          class="w-8 h-8 flex items-center justify-center text-sm font-medium border border-slate-200 rounded hover:bg-slate-50 transition-colors"
+        >
+          {letter}
+        </a>
+      ))}
+    </nav>
+
+    {letters.map((letter) => (
+      <section id={letter} class="mb-10 scroll-mt-20">
+        <h2 class="text-lg font-bold text-slate-900 border-b border-slate-200 pb-2 mb-4">
+          {letter}
+        </h2>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {grouped[letter].map((entry) => <GlossaryCard entry={entry} />)}
+        </div>
+      </section>
+    ))}
+  </div>
+</BaseLayout>

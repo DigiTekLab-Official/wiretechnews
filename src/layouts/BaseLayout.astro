@@ -1,0 +1,147 @@
+---
+import '../styles/global.css';
+import { TOPICS, TOPIC_SLUGS } from '../lib/topics';
+
+interface Props {
+  title: string;
+  description: string;
+  canonicalUrl?: string;
+  ogType?: 'website' | 'article';
+  image?: string;
+  jsonld?: Record<string, unknown> | Record<string, unknown>[];
+}
+
+const {
+  title,
+  description,
+  canonicalUrl,
+  ogType = 'website',
+  image,
+  jsonld,
+} = Astro.props;
+
+const resolvedCanonical = canonicalUrl ?? Astro.url.href;
+const fullTitle = title === 'WireTechNews' ? title : `${title} — WireTechNews`;
+const defaultImage = '/og-default.png';
+const ogImage = image ?? defaultImage;
+
+const schemas = jsonld ? (Array.isArray(jsonld) ? jsonld : [jsonld]) : [];
+const currentPath = Astro.url.pathname;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={resolvedCanonical} />
+
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={resolvedCanonical} />
+    <meta property="og:type" content={ogType} />
+    <meta property="og:site_name" content="WireTechNews" />
+    <meta property="og:image" content={new URL(ogImage, Astro.site).href} />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={new URL(ogImage, Astro.site).href} />
+
+    {schemas.map((schema) => (
+      <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+    ))}
+
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <link rel="alternate" type="application/rss+xml" title="WireTechNews" href="/feed.xml" />
+  </head>
+
+  <body class="bg-white text-slate-900 antialiased min-h-screen flex flex-col">
+    <header class="border-b border-slate-200 bg-white sticky top-0 z-40">
+      <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-14">
+          <a href="/" class="font-bold text-slate-900 tracking-tight text-lg shrink-0">
+            WireTechNews
+          </a>
+          <div class="hidden lg:flex items-center gap-5 text-sm font-medium text-slate-600">
+            {TOPIC_SLUGS.map((slug) => (
+              <a
+                href={`/topic/${slug}/`}
+                class:list={[
+                  'hover:text-slate-900 transition-colors',
+                  currentPath.startsWith(`/topic/${slug}`) && 'text-slate-900',
+                ]}
+              >
+                {TOPICS[slug].label}
+              </a>
+            ))}
+            <span class="text-slate-300">|</span>
+            <a href="/regulation/" class="hover:text-slate-900 transition-colors">Regulations</a>
+            <a href="/glossary/" class="hover:text-slate-900 transition-colors">Glossary</a>
+            <a href="/search/" class="hover:text-slate-900 transition-colors">Search</a>
+          </div>
+          <a
+            href="/newsletter/"
+            class="shrink-0 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-1.5 rounded transition-colors"
+          >
+            Newsletter
+          </a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="flex-1">
+      <slot />
+    </main>
+
+    <footer class="border-t border-slate-200 mt-16 bg-slate-50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-sm">
+          <div>
+            <p class="font-semibold text-slate-900 mb-3">Topics</p>
+            <ul class="space-y-2 text-slate-600">
+              {TOPIC_SLUGS.map((slug) => (
+                <li>
+                  <a href={`/topic/${slug}/`} class="hover:text-slate-900 transition-colors">
+                    {TOPICS[slug].label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div>
+            <p class="font-semibold text-slate-900 mb-3">Reference</p>
+            <ul class="space-y-2 text-slate-600">
+              <li><a href="/regulation/" class="hover:text-slate-900 transition-colors">Regulations</a></li>
+              <li><a href="/glossary/" class="hover:text-slate-900 transition-colors">Glossary</a></li>
+            </ul>
+          </div>
+          <div>
+            <p class="font-semibold text-slate-900 mb-3">Intelligence</p>
+            <ul class="space-y-2 text-slate-600">
+              <li><a href="/analysis/" class="hover:text-slate-900 transition-colors">Analysis</a></li>
+              <li><a href="/briefing/" class="hover:text-slate-900 transition-colors">Briefings</a></li>
+              <li><a href="/guide/" class="hover:text-slate-900 transition-colors">Guides</a></li>
+              <li><a href="/alert/" class="hover:text-slate-900 transition-colors">Alerts</a></li>
+            </ul>
+          </div>
+          <div>
+            <p class="font-semibold text-slate-900 mb-3">Platform</p>
+            <ul class="space-y-2 text-slate-600">
+              <li><a href="/newsletter/" class="hover:text-slate-900 transition-colors">Newsletter</a></li>
+              <li><a href="/search/" class="hover:text-slate-900 transition-colors">Search</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="border-t border-slate-200 mt-10 pt-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <p class="text-slate-500 text-sm">
+            © {new Date().getFullYear()} WireTechNews. For informational purposes only, not legal advice.
+          </p>
+          <a href="/" class="font-bold text-slate-900 text-sm">WireTechNews</a>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

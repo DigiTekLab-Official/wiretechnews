@@ -1,0 +1,37 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import NewsletterForm from '../../components/islands/NewsletterForm';
+import { TOPICS, TOPIC_SLUGS } from '../../lib/topics';
+---
+
+<BaseLayout
+  title="Newsletter — Weekly Intelligence Briefings"
+  description="Free weekly briefings on AI governance, privacy law, cybersecurity compliance, and enterprise risk. Trusted by compliance professionals, DPOs, and CISOs."
+>
+  <div class="max-w-2xl mx-auto px-4 sm:px-6 py-16">
+    <h1 class="text-3xl font-bold text-slate-900 mb-4">
+      Weekly Intelligence Briefings
+    </h1>
+    <p class="text-lg text-slate-600 leading-relaxed mb-8">
+      Concise, high-signal briefings on regulatory developments in AI governance, privacy law, cybersecurity compliance, and enterprise risk. Published every week — free.
+    </p>
+
+    <div class="bg-slate-50 border border-slate-200 rounded-xl p-8 mb-10">
+      <p class="text-sm font-semibold text-slate-700 mb-4">Subscribe — free</p>
+      <NewsletterForm client:load />
+      <p class="mt-3 text-xs text-slate-400">No spam. Unsubscribe at any time.</p>
+    </div>
+
+    <div>
+      <p class="text-sm font-semibold text-slate-700 mb-4">Coverage</p>
+      <ul class="grid grid-cols-2 gap-3">
+        {TOPIC_SLUGS.map((slug) => (
+          <li class="flex items-center gap-2 text-sm text-slate-600">
+            <span class="w-1.5 h-1.5 rounded-full bg-blue-500 shrink-0"></span>
+            {TOPICS[slug].label}
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</BaseLayout>

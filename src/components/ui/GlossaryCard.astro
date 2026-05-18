@@ -1,0 +1,18 @@
+---
+import { glossaryUrl } from '../../lib/utils';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  entry: CollectionEntry<'glossary'>;
+}
+
+const { entry } = Astro.props;
+const { term, shortDefinition } = entry.data;
+---
+
+<article class="group">
+  <a href={glossaryUrl(entry.slug)} class="block">
+    <p class="font-semibold text-slate-900 group-hover:text-blue-600 transition-colors">{term}</p>
+    <p class="mt-1 text-sm text-slate-600 line-clamp-2">{shortDefinition}</p>
+  </a>
+</article>

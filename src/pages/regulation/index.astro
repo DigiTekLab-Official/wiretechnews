@@ -1,0 +1,64 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import RegulationCard from '../../components/ui/RegulationCard.astro';
+import Breadcrumb from '../../components/ui/Breadcrumb.astro';
+import { getCollection } from 'astro:content';
+import { breadcrumbJsonLd } from '../../lib/jsonld';
+
+const regulations = await getCollection('regulations');
+const sorted = regulations.sort((a, b) => a.data.shortName.localeCompare(b.data.shortName));
+
+const active = sorted.filter((r) => r.data.status === 'active' || r.data.status === 'amended');
+const proposed = sorted.filter((r) => r.data.status === 'proposed');
+const repealed = sorted.filter((r) => r.data.status === 'repealed');
+---
+
+<BaseLayout
+  title="Regulation Reference"
+  description="Comprehensive reference profiles for GDPR, EU AI Act, NIS2, DORA, CCPA, and 40+ regulations — scope, requirements, penalties, and enforcement."
+  jsonld={[
+    breadcrumbJsonLd([
+      { name: 'Home', url: '/' },
+      { name: 'Regulations', url: '/regulation/' },
+    ]),
+  ]}
+>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <Breadcrumb crumbs={[{ name: 'Home', url: '/' }, { name: 'Regulations', url: '/regulation/' }]} />
+
+    <div class="mt-6 mb-10">
+      <h1 class="text-3xl font-bold text-slate-900">Regulation Reference</h1>
+      <p class="mt-3 text-slate-600 max-w-2xl">
+        Canonical reference profiles for privacy laws, AI regulations, cybersecurity directives,
+        and compliance frameworks. Updated within 72 hours of amendments.
+      </p>
+    </div>
+
+    {active.length > 0 && (
+      <section class="mb-12">
+        <h2 class="text-sm font-semibold text-slate-500 uppercase tracking-wide mb-4">Active</h2>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {active.map((reg) => <RegulationCard entry={reg} />)}
+        </div>
+      </section>
+    )}
+
+    {proposed.length > 0 && (
+      <section class="mb-12">
+        <h2 class="text-sm font-semibold text-slate-500 uppercase tracking-wide mb-4">Proposed / In Progress</h2>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {proposed.map((reg) => <RegulationCard entry={reg} />)}
+        </div>
+      </section>
+    )}
+
+    {repealed.length > 0 && (
+      <section>
+        <h2 class="text-sm font-semibold text-slate-500 uppercase tracking-wide mb-4">Repealed</h2>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {repealed.map((reg) => <RegulationCard entry={reg} />)}
+        </div>
+      </section>
+    )}
+  </div>
+</BaseLayout>

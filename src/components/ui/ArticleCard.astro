@@ -1,0 +1,36 @@
+---
+import TopicBadge from './TopicBadge.astro';
+import ContentTypeBadge from './ContentTypeBadge.astro';
+import { formatDateShort, articleUrl } from '../../lib/utils';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  entry: CollectionEntry<'articles'>;
+  featured?: boolean;
+}
+
+const { entry, featured = false } = Astro.props;
+const { title, description, publishedAt, topic, contentType } = entry.data;
+const url = articleUrl(entry.slug, contentType);
+---
+
+<article class:list={['group', featured && 'lg:flex lg:gap-8']}>
+  <a href={url} class="block flex-1 space-y-3">
+    <div class="flex items-center gap-2 flex-wrap">
+      <ContentTypeBadge contentType={contentType} />
+      <TopicBadge topic={topic} />
+    </div>
+    <h2
+      class:list={[
+        'font-bold text-slate-900 group-hover:text-blue-600 transition-colors leading-snug',
+        featured ? 'text-xl sm:text-2xl' : 'text-base',
+      ]}
+    >
+      {title}
+    </h2>
+    <p class="text-slate-600 text-sm leading-relaxed line-clamp-3">{description}</p>
+    <time class="block text-xs text-slate-400" datetime={publishedAt.toISOString()}>
+      {formatDateShort(publishedAt)}
+    </time>
+  </a>
+</article>
