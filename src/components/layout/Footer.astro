@@ -1,0 +1,74 @@
+---
+// src/components/layout/Footer.astro
+import { TOPICS, TOPIC_SLUGS } from '../../lib/topics';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="border-t border-slate-200 mt-16 bg-slate-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-sm">
+      <div>
+        <p class="font-semibold text-slate-900 mb-3">Topics</p>
+        <ul class="space-y-2 text-slate-600">
+          {TOPIC_SLUGS.map((slug) => (
+            <li>
+              <a href={`/topic/${slug}/`} class="hover:text-slate-900 transition-colors">
+                {TOPICS[slug].label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div>
+        <p class="font-semibold text-slate-900 mb-3">Reference</p>
+        <ul class="space-y-2 text-slate-600">
+          <li><a href="/regulation/" class="hover:text-slate-900 transition-colors">Regulations</a></li>
+          <li><a href="/glossary/" class="hover:text-slate-900 transition-colors">Glossary</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <p class="font-semibold text-slate-900 mb-3">Intelligence</p>
+        <ul class="space-y-2 text-slate-600">
+          <li><a href="/analysis/" class="hover:text-slate-900 transition-colors">Analysis</a></li>
+          <li><a href="/briefing/" class="hover:text-slate-900 transition-colors">Briefings</a></li>
+          <li><a href="/guide/" class="hover:text-slate-900 transition-colors">Guides</a></li>
+          <li><a href="/alert/" class="hover:text-slate-900 transition-colors">Alerts</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <p class="font-semibold text-slate-900 mb-3">Platform</p>
+        <ul class="space-y-2 text-slate-600">
+          <li><a href="/newsletter/" class="hover:text-slate-900 transition-colors">Newsletter</a></li>
+          <li><a href="/search/" class="hover:text-slate-900 transition-colors">Search</a></li>
+        </ul>
+      </div>
+    </div>
+
+    {/* Bottom bar — only this is new vs the original */}
+    <div class="border-t border-slate-200 mt-10 pt-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+      <p class="text-slate-500 text-sm">
+        © {year} WireTechNews. For informational purposes only, not legal advice.
+      </p>
+
+      <p class="text-slate-400 text-xs">
+        Published by{" "}
+        <a
+          href="https://digiteklab.com"
+          target="_blank"
+          rel="noopener"
+          class="text-slate-500 hover:text-blue-600 transition-colors"
+        >
+          Digitek Lab
+        </a>
+      </p>
+
+      <a href="/" class="font-bold text-slate-900 text-sm">WireTechNews</a>
+    </div>
+
+  </div>
+</footer>

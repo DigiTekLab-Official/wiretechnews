@@ -1,3 +1,4 @@
+// src/content/config.ts
 import { defineCollection, z } from 'astro:content';
 
 const articles = defineCollection({
@@ -33,6 +34,7 @@ const regulations = defineCollection({
     penalties: z
       .object({
         maxFine: z.string().optional(),
+        maxFineAbsolute: z.string().optional(),
         criminalLiability: z.boolean().default(false),
       })
       .optional(),

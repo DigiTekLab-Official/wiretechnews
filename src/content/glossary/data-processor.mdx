@@ -1,0 +1,37 @@
+---
+term: "Data Processor"
+shortDefinition: "An entity that processes personal data on behalf of a data controller under a contractual DPA."
+title: "Data Processor"
+description: "Legal definition, enterprise liability, and operational obligations of a Data Processor under global privacy frameworks."
+pubDate: "2026-05-28"
+lastUpdated: "2026-05-28"
+relatedRegulations:
+  - "EU GDPR"
+  - "UK GDPR"
+  - "California Privacy Rights Act (CPRA)"
+coreEntities:
+  - "Data Controller"
+  - "Sub-processor"
+  - "Data Processing Agreement (DPA)"
+---
+
+## Enterprise Definition
+
+A **Data Processor** is a natural or legal person, public authority, agency, or other body which processes personal data purely on behalf of the Data Controller. In enterprise architectures, Processors are typically third-party SaaS vendors, cloud infrastructure hyperscalers (e.g., AWS, Azure), and outsourced analytics firms. 
+
+Processors do not own the data, nor do they determine the strategic purpose or the essential means of processing. They execute operations strictly based on the documented instructions provided by the Controller.
+
+## Operational Liability & Risk Profile
+
+While the Controller bears the primary regulatory burden, modern privacy regimes (such as the GDPR) impose direct statutory obligations and liabilities on Data Processors.
+
+| Operational Obligation | Enterprise Impact | Regulatory Liability |
+| :--- | :--- | :--- |
+| **Security of Processing** | Must implement robust technical controls (encryption, access management) independent of the Controller. | Direct fines for security failures. |
+| **Sub-processor Governance** | Cannot engage downstream vendors (sub-processors) without prior written authorization from the Controller. | Breach of contract and regulatory penalties. |
+| **Incident Reporting** | Must notify the Controller of a data breach "without undue delay." | Operational friction; failure to report shifts direct liability. |
+| **Audit Assistance** | Must submit to audits and inspections conducted by the Controller or a mandated auditor. | Requires dedicated compliance engineering and transparent logging. |
+
+## The Data Processing Agreement (DPA)
+
+The legal relationship between a Controller and a Processor must be governed by a binding contract known as a Data Processing Agreement (DPA) under Article 28 of the GDPR. This document maps the exact boundaries of data usage, indemnification clauses, and deletion protocols upon contract termination.

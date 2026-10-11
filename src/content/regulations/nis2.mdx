@@ -1,0 +1,90 @@
+---
+name: "NIS2 Directive"
+shortName: "NIS2"
+type: "directive"
+jurisdictions:
+  - "European Union"
+status: "active"
+keyRequirements:
+  - "Expanded sectoral scope with critical infrastructure coverage"
+  - "Management accountability and liability"
+  - "Aggressive incident reporting timelines"
+  - "Supply chain security obligations"
+title: "NIS2 Directive: Broadened Critical Infrastructure Cybersecurity"
+description: "Analysis of the NIS2 Directive, detailing the expansion of regulated sectors, management liability, and incident reporting mandates for enterprise compliance."
+pubDate: "2026-05-18"
+lastUpdated: "2026-05-18"
+enforcementPhase: "National Transposition (Effective Oct 2024)"
+coreEntities:
+  - "Essential Entities"
+  - "Important Entities"
+  - "Management Liability"
+  - "Supply Chain Security"
+relatedRegulations:
+  - "DORA"
+  - "GDPR"
+  - "Cyber Resilience Act (CRA)"
+---
+
+## Executive Summary & Enterprise Risk Profile
+
+The Network and Information Security Directive 2 (NIS2) fundamentally expands the scope of European cybersecurity regulation. By replacing the original NIS Directive, it drastically increases the number of regulated entities, bringing mid-sized and large enterprises across diverse sectors (e.g., manufacturing, digital providers, food supply) under strict cybersecurity governance.
+
+Crucially, NIS2 introduces **direct personal liability** for corporate management regarding cybersecurity negligence, fundamentally shifting cyber risk from an IT operational issue to a Board-level legal liability.
+
+## Entity Classification: Essential vs. Important
+
+NIS2 abandons the previous "operator of essential services" terminology, utilizing a size-cap rule to automatically categorize medium and large enterprises into two risk tiers:
+
+### 1. Essential Entities
+Subject to the highest level of proactive supervision and stringent enforcement.
+* **Sectors:** Energy, Transport, Banking/Financial Markets (where DORA does not preempt), Health, Digital Infrastructure (Cloud providers, DNS service providers), and Public Administration.
+* **Supervision:** Proactive, routine audits and continuous regulatory oversight.
+
+### 2. Important Entities
+Subject to reactive supervision, meaning regulators will primarily investigate post-incident.
+* **Sectors:** Postal services, Waste management, Chemicals, Food production, Manufacturing of critical products, and Digital providers (Search engines, online marketplaces).
+
+## Core Operational Mandates
+
+To achieve compliance, enterprise architectures must enforce the following security controls:
+
+1. **Supply Chain Security:** Enterprises must assess the systemic vulnerabilities introduced by their direct suppliers and service providers. This requires continuous third-party risk monitoring (TPRM).
+2. **Aggressive Incident Reporting:** * An "early warning" must be submitted to the CSIRT within **24 hours** of becoming aware of a significant incident.
+   * A full incident notification must follow within **72 hours**.
+   * A final comprehensive report is required within **1 month**.
+3. **Basic Cyber Hygiene Practices:** Mandatory implementation of Multi-Factor Authentication (MFA), continuous vulnerability handling, basic computer training, and secured communications.
+4. **Management Accountability:** The management bodies (C-Suite/Board) must approve cybersecurity risk-management measures, oversee their implementation, and undergo mandatory cybersecurity training. Failure to comply can result in temporary bans on executives holding management positions.
+
+## Fines and Enforcement
+
+Non-compliance carries severe financial and operational penalties:
+* **Essential Entities:** Fines up to €10 million or 2% of total worldwide annual turnover, whichever is higher.
+* **Important Entities:** Fines up to €7 million or 1.4% of total worldwide annual turnover.
+
+---
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Can corporate executives be held personally liable under NIS2?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. NIS2 establishes explicit management accountability. Regulators possess the authority to hold C-suite executives personally liable for gross negligence in cybersecurity risk management and can temporarily suspend their ability to hold managerial roles."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is the timeline for reporting a cyber incident under NIS2?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The directive requires a phased reporting approach: an initial 'early warning' within 24 hours of detecting a significant incident, an incident update within 72 hours, and a final, comprehensive report within 30 days."
+      }
+    }
+  ]
+}
+</script>

@@ -1,0 +1,89 @@
+---
+name: "EU Artificial Intelligence Act"
+shortName: "EU-AI-Act"
+type: "regulation"
+jurisdictions:
+  - "European Union"
+status: "active"
+keyRequirements:
+  - "Risk-tier classification of AI systems"
+  - "Mandatory conformity assessments for high-risk AI"
+  - "GPAI governance and transparency requirements"
+title: "EU AI Act: Enterprise Governance & Compliance Mandates"
+description: "Operational analysis of the EU AI Act, detailing risk-tier classifications, conformity assessments, and GPAI governance for enterprise IT compliance."
+pubDate: "2026-05-18"
+lastUpdated: "2026-05-18"
+enforcementPhase: "Tiered (2024-2027)"
+coreEntities:
+  - "High-Risk AI Systems"
+  - "General Purpose AI (GPAI)"
+  - "AI Office"
+  - "Conformity Assessments"
+relatedRegulations:
+  - "GDPR"
+  - "NIS2"
+  - "Digital Services Act (DSA)"
+---
+
+## Executive Summary & Enterprise Risk Profile
+
+The European Union Artificial Intelligence Act (EU AI Act) represents the world’s first comprehensive legal framework governing AI risk. For enterprise architectures, the regulation enforces a rigid, use-case-driven classification system rather than regulating the underlying technology. Operational compliance requires immediate integration of AI lifecycle governance, rigorous third-party model vetting, and mandatory conformity assessments.
+
+Failure to comply carries severe systemic risk: enforcement actions can reach up to €35 million or 7% of total worldwide annual turnover for prohibited AI practices, significantly exceeding GDPR penalty thresholds.
+
+## Risk-Based Classification Framework
+
+The framework mandates that organizations audit their AI asset inventory and categorize deployments into four distinct risk tiers.
+
+### 1. Unacceptable Risk (Prohibited)
+Systems presenting a clear threat to fundamental rights are explicitly banned. Enterprise operations must purge these capabilities immediately.
+* **Prohibited Models:** Biometric categorization based on sensitive characteristics, predictive policing algorithms, untargeted scraping of facial images, and emotion recognition in workplaces.
+* **Operational Action:** Immediate deprecation and architectural review of legacy HR and security monitoring tools.
+
+### 2. High-Risk AI Systems
+High-risk systems are permitted but subject to extreme regulatory friction. This tier heavily impacts enterprise operations, particularly in human resources, critical infrastructure, and credit scoring.
+* **Compliance Mandates:** * Mandatory pre-deployment conformity assessments.
+  * Implementation of continuous risk management systems.
+  * Strict data governance and bias mitigation protocols.
+  * Human-in-the-loop (HITL) oversight architecture.
+  * Registration in the central EU database.
+
+### 3. General Purpose AI (GPAI) & Systemic Risk
+Models capable of competent performance across a wide range of distinct tasks (e.g., foundational LLMs) face specialized governance.
+* **Standard GPAI:** Must maintain up-to-date technical documentation, comply with EU copyright law, and publish training data summaries.
+* **GPAI with Systemic Risk:** Models exceeding the threshold of 10^25 FLOPs during training require adversarial testing (red-teaming), incident reporting to the EU AI Office, and advanced cybersecurity protections.
+
+## Operational Implementation Matrix
+
+Organizations deploying AI within the EU jurisdiction must execute the following infrastructure updates:
+
+1. **Vendor Risk Management:** Revise all SaaS and third-party contracts to establish liability boundaries for GPAI API usage.
+2. **Quality Management Systems (QMS):** Integrate AI logging and model-drift monitoring into existing QMS and ITIL frameworks.
+3. **Data Localization:** Ensure training datasets for high-risk systems comply concurrently with GDPR data minimization and cross-border transfer mechanisms.
+
+---
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Does the EU AI Act apply to companies located outside of the European Union?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. The EU AI Act possesses extraterritorial reach. It applies to providers placing AI systems or GPAI models on the EU market, and to deployers of AI systems where the output is used within the EU, regardless of the entity's physical headquarters."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is the penalty for violating the EU AI Act?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Penalties are tiered based on the severity of the violation: up to €35 million or 7% of global turnover for prohibited AI practices; up to €15 million or 3% for violating high-risk system obligations; and up to €7.5 million or 1.5% for providing incorrect information to regulators."
+      }
+    }
+  ]
+}
+</script>
