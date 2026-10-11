@@ -1,2 +1,2 @@
 # wiretechnews
-WireTechNews – Technology news, reviews, and guides built with Next.js and modern web stack.
+WireTechNews – AI Governance, Privacy Law, Cybersecurity Compliance & Enterprise Risk Intelligence Platform
